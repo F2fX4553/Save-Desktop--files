@@ -1,38 +1,37 @@
-# User-information-interface
 from tkinter import * # istd3a kolch min tkinter
 from tkinter import ttk # istd3a ttk mn tkinter
 from tkinter import messagebox # istd3a messagebox min tkinter
 import re
 import datetime
+
 root = Tk() # forma
-root.title('SIBNA') # title ta3 lforma
+root.title('0.0.1   SIBNA') # title ta3 lforma
+root.iconbitmap('image\icon.ico')
 fnt = 'Times 16 ' # font ta3 lable
 fntent = 'Helvetica 14' # font ta3 entry
 fntbot = 'Times 14' # font ta3 lbutton
-bg = '#9BCBE8' # background ta3 forma
+bg = '#EE8F25' # background ta3 forma
 bgtxtent = '#7A1B7A' # color text li da5le entry
 pattgmail = '[a-zA-Z0-9]+@[a-zA-Z]+\.(com|fr|outlook|net)' # regolar ta3 gmaile
 pattphone = '[0-9].{9}' # rigolar ta3 phone
 pattmotpass = "^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!?@#$%^&+=])" # hada lmotpass
-pattname = '[A-Z]'
-pattlname = '[A-Z]'
-pattaddres = '[A-Z]'
-
+pattname = '[A-Z]' # hada name 1
+pattlname = '[A-Z]' # hada name 2
+pattaddres = '[A-Z]' # hda address
 fordata = '#402B9C'
 
 pad = 10
 padxx = 10
 root.config(background = bg) # color ta3 forma
-fw = 1000 # hajm width ta3 lforma
+fw = 1100 # hajm width ta3 lforma
 fh = 400 # hajm height ta3 lforma
 x = (root.winfo_screenwidth() - fw) / 2 # hna ydi hjm licron o yn9s mno width ta3 lforma wy9smha 3la 2
 y = (root.winfo_screenheight() - fh) /2 - 50 # hna ydi hjm licron o yn9s height ta3 lforma wy9smha 3la 2 o yn9slh 50
 root.geometry('%dx%d+%d+%d' % (fw,fh,x,y)) # han jm3t kolch
-root.resizable(False,False)
+#root.resizable(False,False)
 
 # hada lable li flforma
-Label(root,text = 'SIBNA',font = 'impact 30',background = bg).pack()
-# farme bach nsgm lable o entry o fiha color ta3 forma
+Label(root,text = 'Secret Files',font = 'impact 30',background = bg).pack()
 farme = Frame(root,bg = bg)
 # hna std3itha o pady m3ntha yb3dhom b 10 px mtlan :)
 farme.pack(pady = pad,padx = padxx)
@@ -66,21 +65,21 @@ sventpassword2 = StringVar()
 
 
 # entry 1
-entfirstname = ttk.Entry(farme,foreground = bgtxtent,font = fntent,textvariable = sventfirstname)
+entfirstname = ttk.Entry(farme,foreground = bgtxtent,font = fntent,width = 23,textvariable = sventfirstname)
 #entry 2
-entlastname = ttk.Entry(farme,foreground = bgtxtent,font = fntent,textvariable = sventlastname)
+entlastname = ttk.Entry(farme,foreground = bgtxtent,font = fntent,width = 23,textvariable = sventlastname)
 #entry 3
-entgmaile2 = ttk.Entry(farme,foreground = bgtxtent,font = fntent,textvariable = sventgmaile2)
+entgmaile2 = ttk.Entry(farme,foreground = bgtxtent,font = fntent,width = 23,textvariable = sventgmaile2)
 #entry 4
-entaddress = ttk.Entry(farme,foreground = bgtxtent,font = fntent,textvariable = sventaddress)
+entaddress = ttk.Entry(farme,foreground = bgtxtent,font = fntent,width = 23,textvariable = sventaddress)
 #entry 5
-entphone = ttk.Entry(farme,foreground = bgtxtent,font = fntent,textvariable = sventphone)
+entphone = ttk.Entry(farme,foreground = bgtxtent,font = fntent,width = 23,textvariable = sventphone)
 #entry 6
-entpassword1 = ttk.Entry(farme,foreground = bgtxtent,font = fntent,textvariable = sventpassword1)
+entpassword1 = ttk.Entry(farme,foreground = bgtxtent,font = fntent,width = 23,textvariable = sventpassword1)
 #entry 7
-entpassword2 = ttk.Entry(farme,foreground = bgtxtent,font = fntent,textvariable = sventpassword2)
+entpassword2 = ttk.Entry(farme,foreground = bgtxtent,font = fntent,width = 23,textvariable = sventpassword2)
 
-datat.grid(row = 0,column = 0)
+datat.grid(row = 0,column = 0,pady = 20,padx = 10)
 ############################################################
 lblfirstname.grid(row = 1,column = 0,pady = pad,padx = padxx)   #
 entfirstname.grid(row = 1,column = 1,pady = pad,padx = padxx)   #
@@ -208,12 +207,13 @@ def tst():
         sventpassword2.set('')
         entfirstname.focus()
 
-
-
 botons = ttk.Style()
 botons.configure('TButton',bg = 'red',font = fntbot)
 botclic = ttk.Button(root,text = 'CLIC HER' ,command = tst)
 botext = ttk.Button(root,text = 'Exit',command = root.destroy)
-botclic.pack(pady = 10)
-botext.pack()
+botclic.place(x= 250,y = 350)
+botext.place(x = 100,y = 350)
+clt = root.winfo_children()
+for c in clt:
+    print(type(c))
 root.mainloop()
