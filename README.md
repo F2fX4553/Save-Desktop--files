@@ -6,11 +6,11 @@ import datetime
 
 root = Tk() # forma
 root.title('0.0.1   SIBNA') # title ta3 lforma
-root.iconbitmap('image\icon.ico')
+root.iconbitmap('image\icon.ico.ico')
 fnt = 'Times 16 ' # font ta3 lable
 fntent = 'Helvetica 14' # font ta3 entry
 fntbot = 'Times 14' # font ta3 lbutton
-bg = '#EE8F25' # background ta3 forma
+bg = '#CDD0D4' # background ta3 forma
 bgtxtent = '#7A1B7A' # color text li da5le entry
 pattgmail = '[a-zA-Z0-9]+@[a-zA-Z]+\.(com|fr|outlook|net)' # regolar ta3 gmaile
 pattphone = '[0-9].{9}' # rigolar ta3 phone
@@ -31,7 +31,7 @@ root.geometry('%dx%d+%d+%d' % (fw,fh,x,y)) # han jm3t kolch
 #root.resizable(False,False)
 
 # hada lable li flforma
-Label(root,text = 'Secret Files',font = 'impact 30',background = bg).pack()
+Label(root,text = 'Secret Files',font = 'impact 30',background = '#FEFFFF',foreground = '#4C7DD2',width = 100,height = 0).pack()
 farme = Frame(root,bg = bg)
 # hna std3itha o pady m3ntha yb3dhom b 10 px mtlan :)
 farme.pack(pady = pad,padx = padxx)
@@ -53,7 +53,13 @@ lblpassword2 = ttk.Label(farme,text ='Enter Yor Password ',background = bg,font 
 # lable 8
 now = datetime.datetime.now()
 datat = ttk.Label(farme,text = now.strftime('%I : %M  : %S'),background = bg,foreground = fordata,font = fnt)
-
+# lable 9
+chiks = ttk.Style()
+chiks.configure('TButton',background = 'blue')
+v = BooleanVar()
+chik = ttk.Checkbutton(root,text = 'Agree to the terms of use',variable = v)
+chik.place(x = 590,y = 290)
+###########################################################
 sventfirstname = StringVar()
 sventlastname = StringVar()
 sventsgmaile1 = StringVar()
@@ -185,6 +191,9 @@ def tst():
 
     elif entpassword1.get() != entpassword2.get():
         messagebox.showinfo('','The password does not match !')
+    elif v.get() == False:
+        messagebox.showinfo('','Knowing to consent')
+
 
     else:
         filename = entfirstname.get() + '.txt'
