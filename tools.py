@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox  # istd3a messagebox min tkinter
 import re
 import datetime
+
 ##########################################################################
 fnt = 'Times 16 ' # font ta3 lable
 fntent = 'Helvetica 14' # font ta3 entry
@@ -14,55 +15,28 @@ bgtxtent = '#7A1B7A' # color text li da5le entry
 poss = Tk()
 kolch(poss)
 poss.title('Secret Files')
+poss.geometry('639x369')
 poss.iconbitmap('imagetof/foldricon.ico')
+
 canvas = Canvas(poss,width = 639, height =357,bg = 'black')
 canvas.pack()
 phot = PhotoImage(file = 'imagetof\imageform1.png')
 canvas.create_image(0,0,image = phot,anchor = NW)
-poss.geometry('639x357')
+
+
+pgbar = ttk.Progressbar(poss, length=640, orient=HORIZONTAL, maximum=100, value=10)
+pgbar.start(100)
+poss.after(9000 ,lambda: poss.destroy())
+pgbar.place(x=1, y=360)
 poss.resizable(False,False)
+
+poss.mainloop()
+
+
+
+
 ###########################################################################
 
-
-def forma2():
-
-    mino = Toplevel()
-    mino.title('Secret Files')
-    mino.geometry('600x400')
-    mino.config(background = '#CDD0D4')
-    mino.iconbitmap('imagetof/foldricon.ico')
-
-    Label(mino,text = 'Secret Files',font = 'impact 30',background = '#FEFFFF',foreground = '#4C7DD2',width = 100,height = 0).pack()
-
-    lableforma2 = ttk.Label(mino,text = 'Enter Your Gmaile',background = '#CDD0D4',foreground = '#7A1B7A',font = fnt)
-    lableforma2mo = ttk.Label(mino,text = 'Enter Your Password',background = '#CDD0D4',foreground = '#7A1B7A',font = fnt)
-    entforma2 = ttk.Entry(mino,background = '#CDD0D4',foreground = '#7A1B7A',font = fnt)
-    entforma2mo = ttk.Entry(mino,background = '#CDD0D4',foreground = '#7A1B7A',font = fnt)
-    lableforma2.place(x = 180,y = 100)
-    entforma2.place(x = 175,y = 150)
-    lableforma2mo.place(x = 180,y = 200)
-    entforma2mo.place(x = 175,y = 250)
-
-
-    botonsforma = ttk.Style()
-    botonsforma.configure('TButton', font='Times 10', background='blue', widht=100, foreground='black')
-
-    botonforma2 = ttk.Button(mino, text='Enter')
-    botonforma2ext = ttk.Button(mino,text = 'Exit',command = mino.destroy)
-    botonforma2.place(x = 50,y = 350)
-    botonforma2ext.place(x = 140,y = 350)
-    mino.resizable(False,False)
-    mino.grab_set()
-
-
-
-
-
-
-
-
-
-############################################################################################################################
 def forma3():
 
     root = Toplevel()  # forma
@@ -89,7 +63,7 @@ def forma3():
     x = (root.winfo_screenwidth() - fw) / 2  # hna ydi hjm licron o yn9s mno width ta3 lforma wy9smha 3la 2
     y = (root.winfo_screenheight() - fh) / 2 - 50  # hna ydi hjm licron o yn9s height ta3 lforma wy9smha 3la 2 o yn9slh 50
     root.geometry('%dx%d+%d+%d' % (fw, fh, x, y))  # han jm3t kolch
-    # root.resizable(False,False)
+    root.resizable(False,False)
 
     # hada lable li flforma
     Label(root, text='Secret Files', font='impact 30', background='#FEFFFF', foreground='#4C7DD2', width=100,height=0).pack()
@@ -119,11 +93,12 @@ def forma3():
     chiks.configure('TButton', background='blue')
     v = BooleanVar()
     chik = ttk.Checkbutton(root, text='Agree to the terms of use', variable=v)
+    chik.bind('<Return>',lambda my : tst())
     chik.place(x=590, y=290)
     ###########################################################
     sventfirstname = StringVar()
     sventlastname = StringVar()
-    sventsgmaile1 = StringVar()
+#    sventsgmaile1 = StringVar()
     sventgmaile2 = StringVar()
     sventaddress = StringVar()
     sventphone = StringVar()
@@ -132,18 +107,25 @@ def forma3():
 
     # entry 1
     entfirstname = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventfirstname)
+    entfirstname.bind('<Return>',lambda my : tst())
     # entry 2
     entlastname = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventlastname)
+    entlastname.bind('<Return>',lambda my : tst())
     # entry 3
     entgmaile2 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventgmaile2)
+    entgmaile2.bind('<Return>',lambda my : tst())
     # entry 4
     entaddress = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventaddress)
+    entaddress.bind('<Return>',lambda my : tst())
     # entry 5
     entphone = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventphone)
+    entphone.bind('<Return>',lambda my : tst())
     # entry 6
     entpassword1 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventpassword1)
+    entpassword1.bind('<Return>',lambda my : tst())
     # entry 7
     entpassword2 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventpassword2)
+    entpassword2.bind('<Return>',lambda my : tst())
 
     datat.grid(row=0, column=0, pady=20, padx=10)
     ############################################################
@@ -153,19 +135,19 @@ def forma3():
     lbllastname.grid(row=1, column=2, pady=pad, padx=padxx)  #
     entlastname.grid(row=1, column=3, pady=pad, padx=padxx)  #
     ############################################################
-    lblgmaile2.grid(row=2, column=0, pady=pad, padx=padxx)  #
+    lblgmaile2.place(x = -5,y = 125)
     entgmaile2.grid(row=2, column=1, pady=pad, padx=padxx)  #
     ############################################################
-    lbladdress.grid(row=2, column=2, pady=pad, padx=padxx)  #
+    lbladdress.place(x = 495,y = 125)
     entaddress.grid(row=2, column=3, pady=pad, padx=padxx)  # hado ga3 bach nstf lable o entry
     ############################################################
-    lblphone.grid(row=5, column=0, pady=pad, padx=padxx)  #
+    lblphone.place(x = -15,y = 175)  #
     entphone.grid(row=5, column=1, pady=pad, padx=padxx)  #
     ############################################################
-    lblpassword1.grid(row=5, column=2, pady=pad, padx=padxx)  #
+    lblpassword1.place(x = 495,y = 175)
     entpassword1.grid(row=5, column=3, pady=pad, padx=padxx)  #
     ############################################################
-    lblpassword2.grid(row=7, column=0, pady=pad, padx=padxx)  #
+    lblpassword2.place(x = -2,y = 220)
     entpassword2.grid(row=7, column=1, pady=pad, padx=padxx)  #
 
     ############################################################
@@ -257,25 +239,10 @@ def forma3():
 
 
         else:
-            filename = entfirstname.get() + '.txt'
-            f = open(filename, 'w+')
-            f.write('first name : ' + entfirstname.get() + '\n')
-            f.write('last name : ' + entlastname.get() + '\n')
-            f.write('gmaile : ' + entgmaile2.get() + '\n')
-            f.write('address : ' + entaddress.get() + '\n')
-            f.write('number phone : ' + entphone.get() + '\n')
-            f.write('first password : ' + entpassword1.get() + '\n')
-            f.write('last password : ' + entpassword2.get())
-            f.close()
-            messagebox.showinfo('', 'The file  : ' + entfirstname.get() + '  was created')
-            sventfirstname.set('')
-            sventlastname.set('')
-            sventgmaile2.set('')
-            sventaddress.set('')
-            sventphone.set('')
-            sventpassword1.set('')
-            sventpassword2.set('')
-            entfirstname.focus()
+
+            mesbox('welcom')
+            pos.destroy()
+            forma0()
 
     botons = ttk.Style()
     botons.configure('TButton', bg='red', font=fntbot)
@@ -287,27 +254,115 @@ def forma3():
     for c in clt:
         print(type(c))
     root.grab_set()
+########################################################################################################################
 
+def forma0():
+    ton = Tk()
+    ton.geometry('800x550')
+    ton.iconbitmap('imagetof/foldricon.ico')
+    ton.title('Secret Files')
+    ton.config(background='#CDD0D4')
+    frem = ttk.Frame(ton)
+    frem.grid(row = 0,column = 0)
+    lb = ttk.Label(frem,text = 'welcom hire',font = fnt)
+    lb.grid(row = 0,column = 0)
+
+    Label(ton, text='Secret Files', font='impact 30', background='#FEFFFF', foreground='#4C7DD2', width=100,height=0).pack()
+    ton.mainloop()
+
+
+
+
+
+def forma4():
+    mino = Toplevel()
+    mino.title('Secret Files')
+    mino.geometry('600x400')
+    mino.config(background='#CDD0D4')
+    mino.iconbitmap('imagetof/foldricon.ico')
+    pattgmail = '[a-zA-Z0-9]+@[a-zA-Z]+\.(com|fr|outlook|net)'
+    pattmotpass = "^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!?@#$%^&+=])"
+
+    Label(mino, text='Secret Files', font='impact 30', background='#FEFFFF', foreground='#4C7DD2', width=100,
+          height=0).pack()
+
+    lableforma2 = ttk.Label(mino, text='Enter Your Gmaile', background='#CDD0D4', foreground='black', font=fnt)
+    lableforma2mo = ttk.Label(mino, text='Enter Your Password', background='#CDD0D4', foreground='black', font=fnt)
+    entforma2 = ttk.Entry(mino, background='#CDD0D4', foreground='#7A1B7A', font=fnt, width=22)
+    entforma2.bind('<Return>', lambda my: test2())
+    entforma2mo = ttk.Entry(mino, background='#CDD0D4', foreground='#7A1B7A', font=fnt, width=22)
+    entforma2mo.bind('<Return>', lambda my: test2())
+    lableforma2.place(x=175, y=125)
+    entforma2.place(x=175, y=150)
+    lableforma2mo.place(x=175, y=225)
+    entforma2mo.place(x=175, y=250)
+    def test2():
+        patt1 = pattgmail  # hadi ta3 gmaile ######## #
+        minos = re.match(patt1, entforma2.get())  #
+
+        patt2 = pattmotpass  # hadi ta3 motpass 1########
+        minoss= re.match(patt2, entforma2mo.get())
+
+        if entforma2.get().strip() == '':
+            messagebox.showinfo('', 'Dictate the gmaile !')
+            entforma2.focus()
+        elif minos == None:
+            messagebox.showinfo('', 'The e-mail is wrong ')
+            entforma2.focus()
+        elif entforma2mo.get().strip() == '':
+            messagebox.showinfo('', 'Dictate the last password !')
+            entforma2mo.focus()
+
+        elif minoss == None:
+            messagebox.showinfo('', 'Uppercase and lowercase letters with symbol')
+            entforma2mo.focus()
+
+        else:
+            mesbox('welcom')
+            pos.destroy()
+            forma0()
+
+
+
+
+
+
+
+
+    botonsforma = ttk.Style()
+    botonsforma.configure('TButton', font='Times 10', background='blue', widht=100, foreground='black')
+    botonforma2 = ttk.Button(mino, text='Enter', command= test2)
+    botonforma2ext = ttk.Button(mino, text='Exit', command=mino.destroy)
+    botonforma2.place(x=50, y=350)
+    botonforma2ext.place(x=140, y=350)
+    mino.resizable(False, False)
+    mino.grab_set()
 
 #############################################################################################################################
-pos = Toplevel()
+pos = Tk()
+
 kolch(pos)
-pos.geometry('400x200')
+pos.geometry('639x400')
+pos.title('Secret Files')
+
 pos.iconbitmap('imagetof/foldricon.ico')
-pos.resizable(False,False)
-canvas2 = Canvas(pos,width = 400, height =200,bg = 'black')
+Label(pos, text='Welcome to Secret Files', font='impact 30', background='#FEFFFF', foreground='#4C7DD2', width=100,
+      height=0).pack()
+
+pos.resizable(False, False)
+canvas2 = Canvas(pos, width=639, height=357, background='black')
 canvas2.pack()
-mktabs = PhotoImage(file = 'imagetof\mktaba.png')
-canvas2.create_image(0,0,image = mktabs,anchor = NW)
-pos.grab_set()
-
-
+mktabs = PhotoImage(file='imagetof\coorona.png')
+canvas2.create_image(0, 0, image=mktabs, anchor=NW)
+def con():
+    pass
 botonsforma1 = ttk.Style()
-botonsforma1.configure('TButton',font = 'Times 10',background = 'blue',widht = 100,foreground = 'black')
-btontsjile = ttk.Button(pos,text = 'Login',command = forma2)
-btonttsjiledo5ol = ttk.Button(pos,text = 'Join Unsplash',command = forma3)
-btontsjile.place(x = 30,y = 20)
-btonttsjiledo5ol.place(x = 120,y = 20)
+botonsforma1.configure('TButton', font='Times 10', background='yellow', widht=100, foreground='blue')
+btontsjile = ttk.Button(pos, text='Login', command=forma4)
+btonttsjiledo5ol = ttk.Button(pos, text='Join Unsplash', width=18, command=forma3)
+btontsjile.place(x=30, y=90)
+btonttsjiledo5ol.place(x=120, y=90)
+
+pos.mainloop()
 
 
-poss.mainloop()
