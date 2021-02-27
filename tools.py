@@ -1,5 +1,6 @@
 from tkinter import *
 from mess import *
+from ossama import *
 from tkinter import ttk
 from tkinter import messagebox  # istd3a messagebox min tkinter
 import re
@@ -28,6 +29,7 @@ pgbar = ttk.Progressbar(poss, length=640, orient=HORIZONTAL, maximum=100, value=
 pgbar.start(100)
 poss.after(9000 ,lambda: poss.destroy())
 pgbar.place(x=1, y=360)
+poss.overrideredirect(1) #Remove border
 poss.resizable(False,False)
 
 poss.mainloop()
@@ -82,9 +84,9 @@ def forma3():
     # lable 5
     lblphone = ttk.Label(farme, text='   Enter Yor Number Phone ', background=bg, font=fnt)
     # lable 6
-    lblpassword1 = ttk.Label(farme, text='Enter Yor Password ', background=bg, font=fnt)
+    lblpassword1 = ttk.Label(farme, text='Enter Yor Password ', background=bg, font=fnt )
     # lable 7
-    lblpassword2 = ttk.Label(farme, text='Enter Yor Password ', background=bg, font=fnt)
+    lblpassword2 = ttk.Label(farme, text='Enter Yor Password ', background=bg, font=fnt )
     # lable 8
     now = datetime.datetime.now()
     datat = ttk.Label(farme, text=now.strftime('%I : %M  : %S'), background=bg, foreground=fordata, font=fnt)
@@ -121,10 +123,10 @@ def forma3():
     entphone = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventphone)
     entphone.bind('<Return>',lambda my : tst())
     # entry 6
-    entpassword1 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventpassword1)
+    entpassword1 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventpassword1, show='*')
     entpassword1.bind('<Return>',lambda my : tst())
     # entry 7
-    entpassword2 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventpassword2)
+    entpassword2 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventpassword2 ,  show='*')
     entpassword2.bind('<Return>',lambda my : tst())
 
     datat.grid(row=0, column=0, pady=20, padx=10)
@@ -257,18 +259,36 @@ def forma3():
 ########################################################################################################################
 
 def forma0():
-    ton = Tk()
-    ton.geometry('800x550')
-    ton.iconbitmap('imagetof/foldricon.ico')
+    ton = tk.Tk()
+    ton.iconbitmap('imagphoto/foldricon.ico')
     ton.title('Secret Files')
     ton.config(background='#CDD0D4')
-    frem = ttk.Frame(ton)
-    frem.grid(row = 0,column = 0)
-    lb = ttk.Label(frem,text = 'welcom hire',font = fnt)
-    lb.grid(row = 0,column = 0)
+    fw = 800  # hajm width ta3 lforma
+    fh = 600  # hajm height ta3 lforma
+    x = (ton.winfo_screenwidth() - fw) / 2  # hna ydi hjm licron o yn9s mno width ta3 lforma wy9smha 3la 2
+    y = (ton.winfo_screenheight() - fh) / 2 - 50  # hna ydi hjm licron o yn9s height ta3 lforma wy9smha 3la 2 o yn9slh 50
+    ton.geometry('%dx%d+%d+%d' % (fw, fh, x, y))
+    ton.grid_rowconfigure(0, weight=1)
+    ton.grid_columnconfigure(1, weight=1)
 
-    Label(ton, text='Secret Files', font='impact 30', background='#FEFFFF', foreground='#4C7DD2', width=100,height=0).pack()
+    side_menu = SideMenu(ton)  # hada ta3 li buttons
+    side_menu.grid(row=0, column=0, sticky="sn")
+
+    sliders = SlidersFrame(ton, bg='white')  # hada ta3 liframes
+    sliders.grid(row=0, column=1, sticky="snew")
+
+    sliders.add(id='Home', title="Home", show=1)  # lframe ta3 home
+    sliders.add(id='Photos', title="Photos Package")  # lframe ta3 photos
+    sliders.add(id='Videos', title="Videos Package")  # lframe ta3 videos
+    sliders.add(id='Music', title="Music Package")  # lframe ta3 music
+
+    side_menu.add('Home', 'imagphoto/home.png', func=lambda: sliders.show('Home'))  # lbutton ta3 home
+    side_menu.add('Photos', 'imagphoto/photo1.png', func=lambda: sliders.show('Photos'))  # lbutton ta3 photos
+    side_menu.add('Videos', 'imagphoto/photo2.png', func=lambda: sliders.show('Videos'))  # lbutton ta3 videos
+    side_menu.add('Music', 'imagphoto/photo3.png', func=lambda: sliders.show('Music'))  # lbutton ta3 music
+
     ton.mainloop()
+
 
 
 
@@ -290,7 +310,7 @@ def forma4():
     lableforma2mo = ttk.Label(mino, text='Enter Your Password', background='#CDD0D4', foreground='black', font=fnt)
     entforma2 = ttk.Entry(mino, background='#CDD0D4', foreground='#7A1B7A', font=fnt, width=22)
     entforma2.bind('<Return>', lambda my: test2())
-    entforma2mo = ttk.Entry(mino, background='#CDD0D4', foreground='#7A1B7A', font=fnt, width=22)
+    entforma2mo = ttk.Entry(mino, background='#CDD0D4', foreground='#7A1B7A', font=fnt, width=22, show='*')
     entforma2mo.bind('<Return>', lambda my: test2())
     lableforma2.place(x=175, y=125)
     entforma2.place(x=175, y=150)
