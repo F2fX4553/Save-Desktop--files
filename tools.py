@@ -5,13 +5,15 @@ from tkinter import ttk
 from tkinter import messagebox  # istd3a messagebox min tkinter
 import re
 import datetime
-
+import sqlite3
 ##########################################################################
 fnt = 'Times 16 ' # font ta3 lable
 fntent = 'Helvetica 14' # font ta3 entry
 fntbot = 'Times 8' # font ta3 lbutton
 bg = '#CDD0D4' # background ta3 forma
+bgt = '#1e1e1e' #background twiter
 bgtxtent = '#7A1B7A' # color text li da5le entry
+fgtext = 'white'
 ##########################################################################
 poss = Tk()
 kolch(poss)
@@ -21,7 +23,7 @@ poss.iconbitmap('imagetof/foldricon.ico')
 
 canvas = Canvas(poss,width = 639, height =357,bg = 'black')
 canvas.pack()
-phot = PhotoImage(file = 'imagetof\imageform1.png')
+phot = PhotoImage(file = 'imagetof/design.png')
 canvas.create_image(0,0,image = phot,anchor = NW)
 
 
@@ -36,7 +38,52 @@ poss.mainloop()
 
 
 
+def create_database():
+    conn = sqlite3.connect('secret_files.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            firstname TEXT,
+            gmaile TEXT UNIQUE,
+            password TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
+
+def register_user(firstname, gmaile, password):
+    conn = sqlite3.connect('secret_files.db')
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+            INSERT INTO users (firstname, gmaile, password) VALUES (?, ?, ?)
+        ''', (firstname, gmaile, password))
+        conn.commit()
+        conn.close()
+        return True  # Registration successful
+    except sqlite3.IntegrityError:
+        conn.close()
+        return False  # User with this email already exists
+
+
+def authenticate_user(gmaile, password):
+    conn = sqlite3.connect('secret_files.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM users WHERE gmaile = ? AND password = ?
+    ''', (gmaile, password))
+    user = cursor.fetchone()
+    conn.close()
+    if user:
+        return True  # Authentication successful
+    else:
+        return False  # Authentication failed
+
+
+##########################################################################
+# Functions for different forms
 ###########################################################################
 
 def forma3():
@@ -52,14 +99,18 @@ def forma3():
     pattgmail = '[a-zA-Z0-9]+@[a-zA-Z]+\.(com|fr|outlook|net)'  # regolar ta3 gmaile
     pattphone = '[0-9].{9}'  # rigolar ta3 phone
     pattmotpass = "^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!?@#$%^&+=])"  # hada lmotpass
-    pattname = '[A-Z]'  # hada name 1
+    pattname = '[a-z]'  # hada name 1
     pattlname = '[A-Z]'  # hada name 2
     pattaddres = '[A-Z]'  # hda address
     fordata = '#402B9C'
+    # SQLite database operations
+
+
+
 
     pad = 10
     padxx = 10
-    root.config(background=bg)  # color ta3 forma
+    root.config(background=bgt)  # color ta3 forma
     fw = 1100  # hajm width ta3 lforma
     fh = 400  # hajm height ta3 lforma
     x = (root.winfo_screenwidth() - fw) / 2  # hna ydi hjm licron o yn9s mno width ta3 lforma wy9smha 3la 2
@@ -69,41 +120,41 @@ def forma3():
 
     # hada lable li flforma
     Label(root, text='Secret Files', font='impact 30', background='#FEFFFF', foreground='#4C7DD2', width=100,height=0).pack()
-    farme = Frame(root, bg=bg)
+    farme = Frame(root, bg="#1e1e1e")
     # hna std3itha o pady m3ntha yb3dhom b 10 px mtlan :)
     farme.pack(pady=pad, padx=padxx)
 
     # lable 1
-    lblfirstname = ttk.Label(farme, text='Enter Yor First Name ', background=bg, font=fnt)
+    lblfirstname = ttk.Label(farme, text='Enter Yor Name ', background=bgt,foreground=fgtext, font=fgtext)
     # lable 2
-    lbllastname = ttk.Label(farme, text='Enter Yor Last Name ', background=bg, font=fnt)
+    #lbllastname = ttk.Label(farme, text='Enter Yor Last Name ', background=bg, font=fnt)
     # lable 3
-    lblgmaile2 = ttk.Label(farme, text=' Enter Yor Gmaile ', background=bg, font=fnt)
+    lblgmaile2 = ttk.Label(farme, text=' Enter Yor Gmaile ', background=bgt,foreground=fgtext, font=fgtext)
     # lable 4
-    lbladdress = ttk.Label(farme, text=' Enter Yor Address ', background=bg, font=fnt)
+    #lbladdress = ttk.Label(farme, text=' Enter Yor Address ', background=bg, font=fnt)
     # lable 5
-    lblphone = ttk.Label(farme, text='   Enter Yor Number Phone ', background=bg, font=fnt)
+    #lblphone = ttk.Label(farme, text='   Enter Yor Number Phone ', background=bg, font=fnt)
     # lable 6
-    lblpassword1 = ttk.Label(farme, text='Enter Yor Password ', background=bg, font=fnt )
+    lblpassword1 = ttk.Label(farme, text='Enter Yor Password ', background=bgt,foreground=fgtext, font=fgtext )
     # lable 7
-    lblpassword2 = ttk.Label(farme, text='Enter Yor Password ', background=bg, font=fnt )
+    lblpassword2 = ttk.Label(farme, text='Enter Yor Password ', background=bgt, foreground=fgtext,font=fgtext )
     # lable 8
     now = datetime.datetime.now()
-    datat = ttk.Label(farme, text=now.strftime('%I : %M  : %S'), background=bg, foreground=fordata, font=fnt)
+    datat = ttk.Label(farme, text=now.strftime('%I : %M  : %S'), background=bgt, foreground=fgtext, font=fnt)
     # lable 9
     chiks = ttk.Style()
     chiks.configure('TButton', background='blue')
     v = BooleanVar()
-    chik = ttk.Checkbutton(root, text='Agree to the terms of use', variable=v)
+    chik = ttk.Checkbutton(root, text='Agree to the terms of use', variable=v,)
     chik.bind('<Return>',lambda my : tst())
     chik.place(x=590, y=290)
     ###########################################################
     sventfirstname = StringVar()
-    sventlastname = StringVar()
+    #sventlastname = StringVar()
 #    sventsgmaile1 = StringVar()
     sventgmaile2 = StringVar()
-    sventaddress = StringVar()
-    sventphone = StringVar()
+    #sventaddress = StringVar()
+    #sventphone = StringVar()
     sventpassword1 = StringVar()
     sventpassword2 = StringVar()
 
@@ -111,17 +162,17 @@ def forma3():
     entfirstname = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventfirstname)
     entfirstname.bind('<Return>',lambda my : tst())
     # entry 2
-    entlastname = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventlastname)
-    entlastname.bind('<Return>',lambda my : tst())
+    #entlastname = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventlastname)
+    #entlastname.bind('<Return>',lambda my : tst())
     # entry 3
     entgmaile2 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventgmaile2)
     entgmaile2.bind('<Return>',lambda my : tst())
     # entry 4
-    entaddress = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventaddress)
-    entaddress.bind('<Return>',lambda my : tst())
+    #entaddress = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventaddress)
+    #entaddress.bind('<Return>',lambda my : tst())
     # entry 5
-    entphone = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventphone)
-    entphone.bind('<Return>',lambda my : tst())
+    #entphone = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventphone)
+    #entphone.bind('<Return>',lambda my : tst())
     # entry 6
     entpassword1 = ttk.Entry(farme, foreground=bgtxtent, font=fntent, width=23, textvariable=sventpassword1, show='*')
     entpassword1.bind('<Return>',lambda my : tst())
@@ -134,22 +185,22 @@ def forma3():
     lblfirstname.grid(row=1, column=0, pady=pad, padx=padxx)  #
     entfirstname.grid(row=1, column=1, pady=pad, padx=padxx)  #
     ############################################################
-    lbllastname.grid(row=1, column=2, pady=pad, padx=padxx)  #
-    entlastname.grid(row=1, column=3, pady=pad, padx=padxx)  #
+    #lbllastname.grid(row=1, column=2, pady=pad, padx=padxx)  #
+    #entlastname.grid(row=1, column=3, pady=pad, padx=padxx)  #
     ############################################################
     lblgmaile2.place(x = -5,y = 125)
     entgmaile2.grid(row=2, column=1, pady=pad, padx=padxx)  #
     ############################################################
-    lbladdress.place(x = 495,y = 125)
-    entaddress.grid(row=2, column=3, pady=pad, padx=padxx)  # hado ga3 bach nstf lable o entry
+    #lbladdress.place(x = 495,y = 125)
+    #entaddress.grid(row=2, column=3, pady=pad, padx=padxx)  # hado ga3 bach nstf lable o entry
     ############################################################
-    lblphone.place(x = -15,y = 175)  #
-    entphone.grid(row=5, column=1, pady=pad, padx=padxx)  #
+    #lblphone.place(x = -15,y = 175)  #
+    #entphone.grid(row=5, column=1, pady=pad, padx=padxx)  #
     ############################################################
-    lblpassword1.place(x = 495,y = 175)
-    entpassword1.grid(row=5, column=3, pady=pad, padx=padxx)  #
+    lblpassword1.place(x = -2,y = 175)
+    entpassword1.grid(row=7, column=3, pady=pad, padx=padxx)  #
     ############################################################
-    lblpassword2.place(x = -2,y = 220)
+    lblpassword2.place(x = 5,y = 220)
     entpassword2.grid(row=7, column=1, pady=pad, padx=padxx)  #
 
     ############################################################
@@ -158,18 +209,18 @@ def forma3():
         patt1 = pattname  # hadi ta3 name lwale ######## #
         fnam = re.match(patt1, entfirstname.get())
 
-        patt2 = pattlname  # hadi ta3 name tow ######## #
-        lnam = re.match(patt2, entlastname.get())
+        #patt2 = pattlname  # hadi ta3 name tow ######## #
+        #lnam = re.match(patt2, entlastname.get())
 
         patt3 = pattgmail  # hadi ta3 gmaile ######## #
         g = re.match(patt3, entgmaile2.get())  #
         ##########################################################################
 
-        patt4 = pattaddres  # hadi ta3 address ######## #
-        addr = re.match(patt4, entaddress.get())
+        #patt4 = pattaddres  # hadi ta3 address ######## #
+        #addr = re.match(patt4, entaddress.get())
 
-        patt5 = pattphone  # hdi ta3 phone ##########
-        ph = re.match(patt5, entphone.get())
+        #patt5 = pattphone  # hdi ta3 phone ##########
+        #ph = re.match(patt5, entphone.get())
         #############################################################################
 
         patt6 = pattmotpass  # hadi ta3 motpass 1########
@@ -187,13 +238,6 @@ def forma3():
             messagebox.showinfo('', 'He writes an uppercase with lowercase letters')
             entfirstname.focus()
 
-        elif entlastname.get().strip() == '':
-            messagebox.showinfo('', 'Fill out the second name !')
-            entlastname.focus()
-        elif lnam == None:
-            messagebox.showinfo('', 'He writes an uppercase with lowercase letters')
-            entlastname.focus()
-
 
         elif entgmaile2.get().strip() == '':
             messagebox.showinfo('', 'Dictate the gmaile !')
@@ -202,21 +246,6 @@ def forma3():
         elif g == None:
             messagebox.showinfo('', 'The e-mail is wrong ')
             entgmaile2.focus()
-
-        elif entaddress.get().strip() == '':
-            messagebox.showinfo('', 'Dictate the address !')
-            entaddress.focus()
-        elif addr == None:
-            messagebox.showinfo('', 'Dictate the address')
-            entaddress.focus()
-
-        elif entphone.get().strip() == '':
-            messagebox.showinfo('', 'Dictate the number phone !')
-            entphone.focus()
-
-        elif ph == None:
-            messagebox.showinfo('', 'Wrong number ')
-            entphone.focus()
 
         elif entpassword1.get().strip() == '':
             messagebox.showinfo('', 'Dictate the first password !')
@@ -242,13 +271,19 @@ def forma3():
 
         else:
 
-            mesbox('welcom')
-            pos.destroy()
-            forma0()
+            # Register the user
+            success = register_user(entfirstname.get(), entgmaile2.get(), entpassword1.get())
+            if success:
+                messagebox.showinfo('', 'Registration successful!')
+                pos.destroy()
+                forma0()
+            else:
+                messagebox.showinfo('', 'User with this email already exists!')
+            
 
     botons = ttk.Style()
     botons.configure('TButton', bg='red', font=fntbot)
-    botclic = ttk.Button(root, text='CLIC HER', command=tst)
+    botclic = ttk.Button(root, text='SIGN IN', command=tst)
     botext = ttk.Button(root, text='Exit', command=root.destroy)
     botclic.place(x=250, y=350)
     botext.place(x=100, y=350)
@@ -298,7 +333,7 @@ def forma4():
     mino = Toplevel()
     mino.title('Secret Files')
     mino.geometry('600x400')
-    mino.config(background='#CDD0D4')
+    mino.config(background=bgt)
     mino.iconbitmap('imagetof/foldricon.ico')
     pattgmail = '[a-zA-Z0-9]+@[a-zA-Z]+\.(com|fr|outlook|net)'
     pattmotpass = "^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!?@#$%^&+=])"
@@ -306,8 +341,8 @@ def forma4():
     Label(mino, text='Secret Files', font='impact 30', background='#FEFFFF', foreground='#4C7DD2', width=100,
           height=0).pack()
 
-    lableforma2 = ttk.Label(mino, text='Enter Your Gmaile', background='#CDD0D4', foreground='black', font=fnt)
-    lableforma2mo = ttk.Label(mino, text='Enter Your Password', background='#CDD0D4', foreground='black', font=fnt)
+    lableforma2 = ttk.Label(mino, text='Enter Your Gmaile', background=bgt, foreground=fgtext, font=fnt)
+    lableforma2mo = ttk.Label(mino, text='Enter Your Password', background=bgt, foreground=fgtext, font=fnt)
     entforma2 = ttk.Entry(mino, background='#CDD0D4', foreground='#7A1B7A', font=fnt, width=22)
     entforma2.bind('<Return>', lambda my: test2())
     entforma2mo = ttk.Entry(mino, background='#CDD0D4', foreground='#7A1B7A', font=fnt, width=22, show='*')
@@ -338,9 +373,16 @@ def forma4():
             entforma2mo.focus()
 
         else:
-            mesbox('welcom')
-            pos.destroy()
-            forma0()
+            # Authenticate the user
+            authenticated = authenticate_user(entforma2.get(), entforma2mo.get())
+            if authenticated:
+                messagebox.showinfo('', 'Login successful!')
+                pos.destroy()
+                forma0()
+            else:
+                messagebox.showinfo('', 'Invalid email or password!')
+            
+            
 
 
 
@@ -351,7 +393,7 @@ def forma4():
 
     botonsforma = ttk.Style()
     botonsforma.configure('TButton', font='Times 10', background='blue', widht=100, foreground='black')
-    botonforma2 = ttk.Button(mino, text='Enter', command= test2)
+    botonforma2 = ttk.Button(mino, text='LOGIN', command= test2)
     botonforma2ext = ttk.Button(mino, text='Exit', command=mino.destroy)
     botonforma2.place(x=50, y=350)
     botonforma2ext.place(x=140, y=350)
@@ -372,14 +414,14 @@ Label(pos, text='Welcome to Secret Files', font='impact 30', background='#FEFFFF
 pos.resizable(False, False)
 canvas2 = Canvas(pos, width=639, height=357, background='black')
 canvas2.pack()
-mktabs = PhotoImage(file='imagetof\coorona.png')
+mktabs = PhotoImage(file='imagetof/coorona.png')
 canvas2.create_image(0, 0, image=mktabs, anchor=NW)
 def con():
     pass
 botonsforma1 = ttk.Style()
-botonsforma1.configure('TButton', font='Times 10', background='yellow', widht=100, foreground='blue')
+botonsforma1.configure('TButton', font='Times 10', background='yellow', widht=70, foreground='black')
 btontsjile = ttk.Button(pos, text='Login', command=forma4)
-btonttsjiledo5ol = ttk.Button(pos, text='Join Unsplash', width=18, command=forma3)
+btonttsjiledo5ol = ttk.Button(pos, text='Sign in', width=18, command=forma3)
 btontsjile.place(x=30, y=90)
 btonttsjiledo5ol.place(x=120, y=90)
 
